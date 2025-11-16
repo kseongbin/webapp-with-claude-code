@@ -1,73 +1,173 @@
-# React + TypeScript + Vite
+# GitHub-Notion 동기화 웹앱
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Claude Code를 활용하여 개발한 GitHub 커밋 정보를 Notion 데이터베이스에 자동으로 동기화하는 React 웹 애플리케이션입니다.
 
-Currently, two official plugins are available:
+## 프로젝트 소개
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+이 프로젝트는 GitHub 레포지토리의 커밋 정보를 자동으로 수집하여 Notion 데이터베이스에 동기화하는 웹 애플리케이션입니다. MCP(Model Context Protocol) 기반의 워크플로우를 통해 데이터 변환 및 동기화를 자동화합니다.
 
-## React Compiler
+### 주요 기능
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- **GitHub 커밋 조회**: GitHub API를 통한 레포지토리 커밋 정보 조회
+- **Notion 페이지 생성**: Notion API를 통한 데이터베이스 페이지 자동 생성
+- **MCP 워크플로우**: 자동화된 데이터 변환 및 동기화 프로세스
+- **필터링 옵션**: 브랜치, 작성자, 날짜 범위 기반 커밋 필터링
 
-## Expanding the ESLint configuration
+## 기술 스택
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- **프론트엔드**: React 18 + TypeScript + Vite
+- **스타일링**: CSS Modules
+- **API 클라이언트**:
+  - `@octokit/rest` - GitHub API
+  - `@notionhq/client` - Notion API
+- **개발 도구**: ESLint, TypeScript
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## 시작하기
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+### 사전 요구사항
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+- Node.js 18 이상
+- GitHub Personal Access Token
+- Notion Integration Token
+- Notion Database ID
+
+### 설치 및 실행
+
+1. **저장소 클론**
+```bash
+git clone https://github.com/kseongbin/github-notion-sync.git
+cd github-notion-sync
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+2. **의존성 설치**
+```bash
+npm install
 ```
+
+3. **환경변수 설정**
+```bash
+cp .env.example .env
+```
+
+`.env` 파일을 열어 다음 값을 입력하세요:
+```env
+VITE_GITHUB_TOKEN=your_github_personal_access_token
+VITE_NOTION_TOKEN=your_notion_integration_token
+VITE_NOTION_DATABASE_ID=your_notion_database_id
+```
+
+4. **개발 서버 실행**
+```bash
+npm run dev
+```
+
+브라우저에서 `http://localhost:5173`으로 접속하세요.
+
+5. **프로덕션 빌드**
+```bash
+npm run build
+npm run preview
+```
+
+## API 설정 가이드
+
+### GitHub Personal Access Token 발급
+
+1. GitHub Settings → Developer settings → Personal access tokens → Tokens (classic)
+2. "Generate new token" 클릭
+3. 필요한 권한 선택: `repo` (전체 저장소 접근)
+4. 생성된 토큰을 `.env` 파일의 `VITE_GITHUB_TOKEN`에 입력
+
+### Notion Integration 설정
+
+1. [Notion Integrations](https://www.notion.so/my-integrations) 페이지 접속
+2. "New integration" 클릭하여 새 integration 생성
+3. 생성된 토큰을 `.env` 파일의 `VITE_NOTION_TOKEN`에 입력
+4. 대상 Notion 데이터베이스를 integration에 연결:
+   - 데이터베이스 페이지에서 "Share" 클릭
+   - "Add connections"에서 생성한 integration 선택
+5. 데이터베이스 URL에서 ID 추출하여 `VITE_NOTION_DATABASE_ID`에 입력
+
+### Notion 데이터베이스 스키마
+
+다음 속성을 가진 Notion 데이터베이스를 생성하세요:
+
+| 속성명 | 타입 | 설명 |
+|--------|------|------|
+| Title | 제목 | 커밋 메시지 |
+| Author | 텍스트 | 커밋 작성자 |
+| Date | 날짜 | 커밋 날짜 |
+| SHA | 텍스트 | 커밋 해시 |
+| URL | URL | GitHub 커밋 링크 |
+
+## 프로젝트 구조
+
+```
+src/
+├── components/          # React 컴포넌트
+├── services/           # API 서비스 레이어
+│   ├── githubService.ts    # GitHub API 클라이언트
+│   └── notionService.ts    # Notion API 클라이언트
+├── config/             # 설정 파일
+│   └── mcpConfig.ts        # MCP 워크플로우 설정
+├── types/              # TypeScript 타입 정의
+└── utils/              # 유틸리티 함수
+```
+
+## 사용 방법
+
+1. 웹 애플리케이션에 접속
+2. GitHub 레포지토리 정보 입력 (owner/repo)
+3. 동기화할 커밋 필터 조건 설정 (선택사항)
+4. "동기화 시작" 버튼 클릭
+5. Notion 데이터베이스에서 동기화된 커밋 정보 확인
+
+## 개발 정보
+
+### Claude Code 활용
+
+이 프로젝트는 [Claude Code](https://claude.com/code)를 활용하여 개발되었습니다:
+
+- **AI 기반 코드 생성**: 서비스 레이어 및 API 통합 코드 자동 생성
+- **타입 안전성**: TypeScript 타입 정의 및 타입 체크 자동화
+- **코드 리팩토링**: 코드 품질 개선 및 최적화
+- **문서화**: 프로젝트 문서 및 주석 작성
+- **디버깅 지원**: 에러 분석 및 해결 방안 제시
+
+### 주요 명령어
+
+```bash
+# 개발 서버 실행
+npm run dev
+
+# 프로덕션 빌드
+npm run build
+
+# 빌드 결과 미리보기
+npm run preview
+
+# ESLint 실행
+npm run lint
+
+# TypeScript 타입 체크
+npx tsc --noEmit
+```
+
+## 보안 주의사항
+
+- `.env` 파일은 절대 Git에 커밋하지 마세요
+- API 토큰은 클라이언트 사이드에 노출되므로, 프로덕션 환경에서는 백엔드 프록시 사용을 권장합니다
+- GitHub 토큰의 권한을 필요한 최소한으로 제한하세요
+- Notion Integration의 접근 권한을 필요한 데이터베이스로만 제한하세요
+
+## 라이선스
+
+MIT License
+
+## 기여
+
+이슈 및 풀 리퀘스트는 언제나 환영합니다!
+
+## 문의
+
+프로젝트에 대한 문의사항은 [Issues](https://github.com/kseongbin/github-notion-sync/issues) 페이지에 남겨주세요.
