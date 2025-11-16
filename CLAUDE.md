@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-GitHub-Notion Sync는 GitHub 커밋 정보를 자동으로 Notion 데이터베이스에 동기화하는 React 웹 애플리케이션입니다.
+Webapp With Claude Code는 GitHub 커밋 정보를 자동으로 Notion 데이터베이스에 동기화하는 React 웹 애플리케이션입니다.
 
 **핵심 기능:**
 - GitHub API를 통한 커밋 정보 조회

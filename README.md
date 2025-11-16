@@ -35,8 +35,8 @@ Claude Code를 활용하여 개발한 GitHub 커밋 정보를 Notion 데이터�
 
 1. **저장소 클론**
 ```bash
-git clone https://github.com/kseongbin/github-notion-sync.git
-cd github-notion-sync
+git clone https://github.com/kseongbin/webapp-with-claude-code.git
+cd webapp-with-claude-code
 ```
 
 2. **의존성 설치**
@@ -170,4 +170,4 @@ MIT License
 
 ## 문의
 
-프로젝트에 대한 문의사항은 [Issues](https://github.com/kseongbin/github-notion-sync/issues) 페이지에 남겨주세요.
+프로젝트에 대한 문의사항은 [Issues](https://github.com/kseongbin/webapp-with-claude-code/issues) 페이지에 남겨주세요.
