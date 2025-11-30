@@ -12,6 +12,7 @@ Claude Code를 활용하여 개발한 GitHub 커밋 정보를 Notion 데이터�
 - **Notion 페이지 생성**: Notion API를 통한 데이터베이스 페이지 자동 생성
 - **MCP 워크플로우**: 자동화된 데이터 변환 및 동기화 프로세스
 - **필터링 옵션**: 브랜치, 작성자, 날짜 범위 기반 커밋 필터링
+- **전자문서 발급 연동**: 정부24 발급 API와 연동하여 주요 민원 서류를 요청
 
 ## 기술 스택
 
@@ -54,6 +55,8 @@ cp .env.example .env
 VITE_GITHUB_TOKEN=your_github_personal_access_token
 VITE_NOTION_TOKEN=your_notion_integration_token
 VITE_NOTION_DATABASE_ID=your_notion_database_id
+VITE_GOV24_API_BASE_URL=https://api.gov24.go.kr/v1
+VITE_GOV24_API_KEY=your_gov24_api_key
 ```
 
 4. **개발 서버 실행**
@@ -100,18 +103,40 @@ npm run preview
 | SHA | 텍스트 | 커밋 해시 |
 | URL | URL | GitHub 커밋 링크 |
 
+### 정부24 문서 발급 API 설정
+
+새롭게 추가된 전자문서 발급 기능을 사용하려면 정부24 또는 관련 행정 API 게이트웨이에서 발급받은 키를 설정해야 합니다.
+
+```env
+VITE_GOV24_API_BASE_URL=https://api.gov24.go.kr/v1    # 기관에서 안내한 베이스 URL
+VITE_GOV24_API_KEY=your_gov24_api_key                 # 발급받은 인증 키
+```
+
+> **주의**: 실제 정부24 API는 사용자 인증이나 공동인증서 연동 등 추가 절차가 필요할 수 있습니다. 본 애플리케이션은 프런트엔드 연동 예시를 제공하며, 민감한 키는 서버에서 프록시 처리하는 것을 권장합니다.
+
 ## 프로젝트 구조
 
 ```
-src/
-├── components/          # React 컴포넌트
-├── services/           # API 서비스 레이어
-│   ├── githubService.ts    # GitHub API 클라이언트
-│   └── notionService.ts    # Notion API 클라이언트
-├── config/             # 설정 파일
-│   └── mcpConfig.ts        # MCP 워크플로우 설정
-├── types/              # TypeScript 타입 정의
-└── utils/              # 유틸리티 함수
+├── src/
+│   ├── services/           # API 서비스 레이어
+│   │   ├── githubService.ts    # GitHub API 클라이언트
+│   │   └── notionService.ts    # Notion API 클라이언트
+│   ├── config/             # 설정 파일
+│   │   └── mcpConfig.ts        # MCP 워크플로우 설정
+│   ├── utils/              # 유틸리티 함수
+│   │   └── markdownToNotion.ts # Markdown to Notion 변환
+│   ├── components/         # React 컴포넌트
+│   ├── types/              # TypeScript 타입 정의
+│   ├── App.tsx             # 메인 앱 컴포넌트
+│   └── main.tsx            # 앱 진입점
+├── scripts/                # 유틸리티 스크립트
+│   ├── sync-claude-md.ts       # Notion 동기화 스크립트
+│   ├── test-notion-connection.ts   # Notion 연결 테스트
+│   ├── test-commit-sync.ts     # 커밋 동기화 테스트
+│   └── test-integration.ts     # 통합 테스트
+├── public/                 # 정적 파일
+├── CLAUDE.md              # Claude Code 가이드
+└── README.md              # 프로젝트 문서
 ```
 
 ## 사용 방법
@@ -151,6 +176,14 @@ npm run lint
 
 # TypeScript 타입 체크
 npx tsc --noEmit
+
+# Notion 동기화 스크립트
+npm run sync:notion
+
+# 테스트 스크립트
+npm run test:notion        # Notion 연결 테스트
+npm run test:commit        # 커밋 동기화 테스트
+npm run test:integration   # 통합 테스트
 ```
 
 ## 보안 주의사항

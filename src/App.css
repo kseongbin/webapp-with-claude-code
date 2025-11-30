@@ -1,42 +1,219 @@
+:root {
+  font-family:
+    'Noto Sans KR',
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    system-ui,
+    sans-serif;
+  line-height: 1.4;
+  color: #1c273a;
+  background-color: #e8f5ff;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background-color: #e8f5ff;
+}
+
 #root {
-  max-width: 1280px;
-  margin: 0 auto;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.app {
+  width: 100%;
   padding: 2rem;
-  text-align: center;
+  display: flex;
+  justify-content: center;
+  overflow-x: auto;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+.service-card {
+  width: 1100px;
+  background: #dceeff;
+  border-radius: 24px;
+  padding: 2rem;
+  box-shadow: 0 20px 40px rgba(50, 108, 182, 0.15);
+  border: 1px solid #cddff3;
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.service-card__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.75rem;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
+.service-card__label {
+  margin: 0;
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #27344b;
 }
 
-.card {
-  padding: 2em;
+.service-card__actions {
+  display: none;
 }
 
-.read-the-docs {
-  color: #888;
+button {
+  font: inherit;
+  border: none;
+  cursor: pointer;
+  background: none;
+}
+
+.icon-button {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: 1px solid #ccd9ea;
+  background: #fff;
+  color: #3b4a64;
+  font-size: 1.5rem;
+  line-height: 1;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.icon-button:hover {
+  background: #f3f7fd;
+  color: #1f7bcf;
+}
+
+.text-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.35rem 0.6rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.9);
+  color: #3a4b66;
+  font-weight: 600;
+}
+
+.service-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.service-tile {
+  background: #fff;
+  border-radius: 16px;
+  padding: 1.2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 8px 24px rgba(79, 132, 197, 0.12);
+  border: 1px solid #ecf2fb;
+  color: #2d2f36;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  min-width: 0;
+}
+
+.service-tile:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 28px rgba(79, 132, 197, 0.2);
+}
+
+.service-tile:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.service-copy {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.25rem;
+}
+
+.service-name {
+  font-size: 1rem;
+  font-weight: 600;
+  word-break: keep-all;
+  text-align: left;
+}
+
+.service-status {
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.service-idle {
+  color: #6f7e96;
+}
+
+.service-loading {
+  color: #1f7bcf;
+}
+
+.service-success {
+  color: #1a9f6d;
+}
+
+.service-error {
+  color: #d64550;
+}
+
+.service-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #fff;
+}
+
+.service-icon--pdf {
+  background: linear-gradient(135deg, #ff865a, #fd5f3d);
+}
+
+.service-icon--link {
+  background: linear-gradient(135deg, #a9d7ff, #43b0ff);
+}
+
+.service-icon--edit {
+  background: linear-gradient(135deg, #91f2c3, #43d39c);
+}
+
+.issuance-panel {
+  margin-top: 2rem;
+  padding: 1.5rem;
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 16px;
+  border: 1px solid #cddff3;
+  box-shadow: inset 0 0 0 1px #ecf2fb;
+}
+
+.issuance-panel h2 {
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+  font-size: 1.2rem;
+}
+
+.issuance-panel details {
+  margin-top: 0.75rem;
+}
+
+.issuance-panel pre {
+  background: #0b1120;
+  color: #e8f5ff;
+  padding: 0.75rem;
+  border-radius: 12px;
+  overflow-x: auto;
+}
+
+.error-text {
+  color: #d64550;
+  font-weight: 600;
 }
